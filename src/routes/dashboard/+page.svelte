@@ -3,6 +3,15 @@
 	import Legend from '../../legend.svelte';
 	import Metric from '../../metric.svelte';
 	import ProgressBar from '../../progressBar.svelte';
+	import { auth, db } from '$lib/firebase.client';
+	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
+
+    onMount(async () => {
+        if (!auth.currentUser) {
+            goto('/');
+        }
+    });
 </script>
 
 <div class="dashboardContainer">
