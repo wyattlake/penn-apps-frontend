@@ -1,5 +1,6 @@
 <script>
 	import Checkbox from '../../checkbox.svelte';
+	import Graph from '../../graph.svelte';
 	import Legend from '../../legend.svelte';
 	import Metric from '../../metric.svelte';
 	import ProgressBar from '../../progressBar.svelte';
@@ -21,7 +22,9 @@
 			<p>Review Average</p>
 		</div>
 
-		<div class="graphContainer"></div>
+		<div class="graphContainer">
+			<Graph />
+		</div>
 	</div>
 
 	<div class="dashboardRight">
@@ -91,6 +94,7 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
+		margin-bottom: 30px;
 	}
 
 	.check {
@@ -99,9 +103,9 @@
 	}
 
 	.graphContainer {
-		background-color: grey;
 		width: 100%;
-		height: 100%;
+		height: calc(100vh - 30px);
+		margin-top: 20px;
 	}
 
 	.dashboardTitle {
