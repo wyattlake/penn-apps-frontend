@@ -75,7 +75,7 @@
 		xaxis: {
 			categories: ['01 Feb', '02 Feb', '03 Feb', '04 Feb', '05 Feb', '06 Feb', '07 Feb'],
 			labels: {
-				show: true,
+				show: false,
 				style: {
 					fontFamily: 'Inter, sans-serif',
 					cssClass: 'text-xs font-normal fill-gray-500 dark:fill-gray-400',
@@ -121,4 +121,6 @@
 <Chart {options} />
 
 <style>
+	div {
+	}
 </style>
