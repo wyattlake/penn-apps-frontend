@@ -40,7 +40,15 @@
 					.then(() => {
 						if (user!.uid != null) {
 							localStorage.setItem('uid', user?.uid);
-							goto('/dashboard');
+							const bizRef = firestore.collection(db, 'businesses');
+							const query = firestore.query(bizRef, firestore.where('business_name', '==', companyName));
+							const querySnapshot = firestore.getDocs(query).then((snapshot) => {
+								if (snapshot.size === 0) {
+									goto('/load')
+								} else {
+									goto('/dashboard');
+								}
+							});
 						}
 						goto('/');
 					});

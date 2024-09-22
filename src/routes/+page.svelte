@@ -43,7 +43,8 @@
 				<span class="typewriter-container">
 					<Typewriter mode="loop">
 						<h1 class="gradient-text-2">small businesses</h1>
-						<h1 class="gradient-text-2">nonprofits</h1>
+            <h1 class="gradient-text-2">creatives</h1>
+						<h1 class="gradient-text-2">mom-and-pop shops</h1>
 						<h1 class="gradient-text-2">innovators</h1>
 					</Typewriter>
 				</span>
