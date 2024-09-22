@@ -40,6 +40,12 @@
 		}
 	});
 
+	function signout() {
+		localStorage.clear();
+		session.set({loggedIn: false, user: null});
+		goto('/');
+	}
+
 
 	// load
 </script>
@@ -72,7 +78,10 @@
 
 	<div class="dashboardRight">
 		<div>
-			<h2>Key Metrics</h2>
+			<div class="right-top" style="display:flex;flex-direction:row;justify-content:space-between">
+				<h2>Key Metrics</h2>
+				<button on:click={signout}>Sign Out</button>
+			</div>
 			<div class="greyBox" style="display:flex;flex-direction:row;justify-content:space-between;">
 				<Metric change={5.21} number={10.51} name="NPS" />
 				<Metric change={5.21} number={10.51} name="Review Count" up={false} />
@@ -223,5 +232,13 @@
 		flex-direction: column;
 		height: 70px;
 		justify-content: space-between;
+	}
+
+	button {
+		padding: 0;
+		border: none;
+		font-size: 23px;
+		font-weight: 300;
+		background: none;
 	}
 </style>

@@ -1,8 +1,20 @@
 <script>
 	import { page } from '$app/stores';
 	import MiniGraph from '../../../miniGraph.svelte';
+	import { goto } from '$app/navigation';
+	import { session } from '$lib/session';
 
 	let slug_id = $page.params.slug;
+
+	function signout() {
+		localStorage.clear();
+		session.set({loggedIn: false, user: null});
+		goto('/');
+	}
+
+	function compback() {
+		goto('/dashboard');
+	}
 </script>
 
 <div class="graphSidebar">
@@ -21,7 +33,13 @@
 </div>
 
 <div class="article">
-	<h1>Direct Comparison</h1>
+	<div style="display:flex;flex-direction:row;justify-content:space-between">
+		<h1>Direct Comparison</h1>
+		<div style="display:flex;flex-direction:row;gap:20px">
+			<button on:click={compback}>Dashboard</button>  
+			<button on:click={signout}>Sign Out</button>
+		</div>
+	</div>
 
 	<h2>AI Suggestions</h2>
 	<p>
@@ -140,5 +158,12 @@
 		padding-top: 20px;
 		padding-bottom: 20px;
 		height: 100vh;
+	}
+	button {
+		padding: 0;
+		border: none;
+		font-size: 23px;
+		font-weight: 300;
+		background: none;
 	}
 </style>

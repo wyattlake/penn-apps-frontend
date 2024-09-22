@@ -60,13 +60,7 @@
 </div>
 
 <style>
-	:global(body) {
-		font-family: Arial, sans-serif;
-		line-height: 1.2;
-		overflow: hidden;
-		margin: 0;
-		padding: 0;
-	}
+	@import '/src/styles.css';
 
 	.login-container {
 		display: flex;

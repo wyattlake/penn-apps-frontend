@@ -36,9 +36,10 @@
 	<main class="flex-grow flex items-center">
 		<div class="text-container">
 			<h1>
-				Building
-				<span class="gradient-text">data analytics</span>
-				solutions for
+				Building <span class="gradient-text">data analytics</span> solutions 
+      </h1>
+      <div style="display:flex;flex-direction:row;gap:15px">
+        <h1>for</h1>
 				<span class="typewriter-container">
 					<Typewriter mode="loop">
 						<h1 class="gradient-text-2">small businesses</h1>
@@ -46,11 +47,11 @@
 						<h1 class="gradient-text-2">innovators</h1>
 					</Typewriter>
 				</span>
-			</h1>
-			<h2>
+			</div>
+			<p style="font-family: Inter;font-weight: 300;font-size:23px">
 				We utilize web scraping and super fast AI technology to create competitive recommendations
 				for your business
-			</h2>
+      </p>
 		</div>
 		<div class="button-container" style="margin-top: 50px">
 			<a href="/login" class="btn btn-secondary">Login</a>
@@ -60,13 +61,7 @@
 </div>
 
 <style>
-	:global(body) {
-		font-family: Arial, sans-serif;
-		line-height: 1.2;
-		overflow: hidden;
-		margin: 0;
-		padding: 0;
-	}
+	@import '/src/styles.css';
 
 	.btn {
 		display: inline-flex;
@@ -160,7 +155,7 @@
 
 	h2 {
 		font-size: 1.6rem;
-		font-weight: normal;
+    font-weight: 300;
 	}
 
 	.gradient-text {
