@@ -22,8 +22,7 @@
 		background: rgb(255 255 255 / 1);
 	}
 	.h1 {
-		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
-			sans-serif;
+		font-family: "Inter";
 		margin-bottom: 1rem;
 	}
 
