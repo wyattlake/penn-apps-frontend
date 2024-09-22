@@ -23,9 +23,9 @@
 
 	.barContainer > p {
 		margin: 0px;
-		font-size: 22px;
+		font-size: 20px;
 		font-weight: 300;
-		margin-bottom: 5px;
+		margin-top: 5px;
 	}
 
 	.barBase {
@@ -35,7 +35,7 @@
 		height: 25px;
 		position: absolute;
 		width: 250px;
-		margin: 0px;
+		margin-top: 4px;
 	}
 
 	.barFill {
@@ -46,7 +46,7 @@
 		z-index: 1;
 		position: absolute;
 		width: calc(250px * var(--progress));
-		margin: 0px;
+		margin-top: 4px;
 	}
 
 	.barContainer {

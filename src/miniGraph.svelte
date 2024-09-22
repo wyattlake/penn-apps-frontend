@@ -1,6 +1,11 @@
 <script>
 	import { Chart, Card, A, Button, Dropdown, DropdownItem, Popover } from 'flowbite-svelte';
 
+	export let categories;
+	export let ydata;
+	export let cdata;
+	export let cname;
+
 	let options = {
 		chart: {
 			height: '100%',
@@ -28,12 +33,12 @@
 			}
 		},
 		fill: {
-			type: ['solid', 'gradient'],
+			type: ['gradient', 'solid'],
 			gradient: {
 				opacityFrom: 0.55,
 				opacityTo: 0,
 				shade: '#1C64F2',
-				gradientToColors: ['#1C64F2']
+				gradientToColors: ['#D3FCD8']
 			},
 			solid: {
 				opacity: [0.35, 1]
@@ -57,23 +62,23 @@
 		},
 		series: [
 			{
-				name: 'Competition',
-				type: 'line',
-				data: [5080, 5100, 5090, 5120, 5132, 5180],
-				color: '#F3A0F7'
-			},
-			{
 				name: 'You',
 				type: 'area',
-				data: [5100, 5130, 5070, 5130, 5080, 5050],
+				data: cdata,
 				color: '#95E398'
+			},
+			{
+				name: cname,
+				type: 'line',
+				data: ydata,
+				color: '#F3A0F7'
 			}
 		],
 		legend: {
 			show: false
 		},
 		xaxis: {
-			categories: ['Feb', '02 Feb', '03 Feb', '04 Feb', '05 Feb', '06 Feb', '07 Feb'],
+			categories: categories,
 			labels: {
 				show: true,
 				hideOverlappingLabels: true,

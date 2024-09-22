@@ -4,6 +4,7 @@
 	import Legend from '../../legend.svelte';
 	import Metric from '../../metric.svelte';
 	import ProgressBar from '../../progressBar.svelte';
+	import Info from '../../icons/info.svelte';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	// firebase, firestore imports
@@ -114,8 +115,7 @@
 
 			npsChange = nps - lastNps;
 
-			nps = nps;
-			npsChange = npsChange;
+			reviewChange = reviewCount - lastCount;
 
 			// fetch request to https://green-sound-1619.ploomberapp.io/db/competitors/business_id={businessData.id}
 			fetch(
@@ -266,6 +266,7 @@
 				</div>
 			</div>
 			<div class="middleRight">
+				<p>Customer opinions on:</p>
 				<ProgressBar progress={foodSentiment} barColor="#95E398" name="Food" />
 				<ProgressBar progress={environmentSentiment} barColor="#F3A0F7" name="Environment" />
 				<ProgressBar progress={serviceSentiment} barColor="#54bdff" name="Service" />
