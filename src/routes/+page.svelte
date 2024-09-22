@@ -165,7 +165,7 @@
 
 	.gradient-text {
 		display: inline-block;
-		background: linear-gradient(180deg, #77c893, #a9f095);
+		background: linear-gradient(180deg, #3acc52, #a9f095);
 		-webkit-background-clip: text;
 		background-clip: text;
 		-webkit-text-fill-color: transparent;
@@ -174,7 +174,7 @@
 
 	.gradient-text-2 {
 		display: inline-block;
-		background: linear-gradient(0deg, #77c893, #a9f095);
+		background: linear-gradient(0deg, #3acc52, #a9f095);
 		-webkit-background-clip: text;
 		background-clip: text;
 		-webkit-text-fill-color: transparent;
