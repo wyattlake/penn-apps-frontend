@@ -200,7 +200,7 @@
 		<div class="dashboardTitle">
 			<h1>Dashboard</h1>
 
-			<p>{yname}</p>
+			<p>{yname == 'Loading...' ? yname : yname + ' - Average Review Ratings'}</p>
 		</div>
 
 		<div class="graphContainer">

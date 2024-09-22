@@ -7,7 +7,9 @@
 <div class="barContainer" style="--theme-color: {barColor}; --progress: {progress}">
 	<p>{name}</p>
 	<div class="barBody">
-		<div class="barFill"></div>
+		{#if progress != 0}
+			<div class="barFill"></div>
+		{/if}
 		<div class="barBase"></div>
 	</div>
 </div>

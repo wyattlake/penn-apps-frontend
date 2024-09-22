@@ -8,6 +8,8 @@
 	import { auth, db } from '$lib/firebase.client';
 	import * as firestore from 'firebase/firestore';
 
+	import SvelteMarkdown from 'svelte-markdown';
+
 	let slug_id = $page.params.slug;
 
 	let updateToggle = true;
@@ -30,6 +32,9 @@
 	let cdata1: number[] = [];
 	let ydata2: number[] = [];
 	let cdata2: number[] = [];
+
+	let llm_response = 'Generating response...';
+	let llm_response2 = 'Generating response...';
 
 	onMount(async () => {
 		if (!localStorage.getItem('uid')) {
@@ -90,8 +95,6 @@
 					}
 				}
 
-				console.log(r1);
-
 				for (let raw_category of raw_categories) {
 					if (
 						r1.monthly_reviews_count[raw_category] != undefined &&
@@ -110,6 +113,66 @@
 			}
 
 			updateToggle = !updateToggle;
+
+			let prompt =
+				'I will provide some reviews for my small business, which you should take as an input and generate suggestions and ideas for how the establishment can be improved, action items that can enhance quality and customer satisifcation, and other improvement ideas you may have.' +
+				'Dive right into the feedback. Do not give any introductions. You should separate ideas as new paragraphs and include a small title for the idea before describing it. Bold the title' +
+				' IN YOUR RESPONSE, DO NOT MENTION THE REVIEW OR THE REVIEWER. ONLY MENTION THE INSIGHTS DERIVED ABOUT MY BUSINESS FROM THE CONTENT OF THE REVIEW. ' +
+				'\n\nGiven this POSITIVE review of my business: \n' +
+				r1.good_review[1] +
+				'. And this NEGATIVE review of my business: \n' +
+				r1.bad_review[1] +
+				' come up with suggestions for my busness, do not mention the reviewer, do not describe the establishment, offer advice. After you generate the response, ensure that the word "reviewer" or any synonyms or substitutes for "reviewer" are not in your response. All in all, discuss ONLY my BUSINESS not the reviewer.';
+
+			if (r2 != undefined) {
+				let prompt2 =
+					' IN YOUR RESPONSE, DO NOT MENTION THE REVIEW OR THE REVIEWER. ONLY MENTION THE INSIGHTS DERIVED ABOUT THE BUSINESS FROM THE CONTENT OF THE REVIEW. ' +
+					'\n\nGiven this POSITIVE review: \n' +
+					r2.good_review[1] +
+					'. And this NEGATIVE review: \n' +
+					r2.bad_review[1] +
+					' Describe this competitor business.';
+
+				fetch(
+					`http://localhost:8088/https://green-sound-1619.ploomberapp.io/suggestions/prompt=${prompt2}`,
+					{
+						method: 'GET',
+						mode: 'cors',
+						headers: {
+							'Content-Type': 'application/json'
+						}
+					}
+				)
+					.then((response) => {
+						return response.text();
+					})
+					.then(async (data) => {
+						llm_response2 = data;
+
+						fetch(
+							`http://localhost:8088/https://green-sound-1619.ploomberapp.io/suggestions/prompt=${prompt}`,
+							{
+								method: 'GET',
+								mode: 'cors',
+								headers: {
+									'Content-Type': 'application/json'
+								}
+							}
+						)
+							.then((response) => {
+								return response.text();
+							})
+							.then(async (data) => {
+								llm_response = data;
+							})
+							.catch((error) => {
+								console.log(error);
+							});
+					})
+					.catch((error) => {
+						console.log(error);
+					});
+			}
 		}
 	});
 </script>
@@ -142,69 +205,21 @@
 		</div>
 	</div>
 
-	<h2>AI Suggestions</h2>
-	<p>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut metus nisi, interdum id tempor sed,
-		elementum vel turpis. Phasellus accumsan tempor libero, a porttitor nisl dictum quis. Quisque et
-		dapibus nunc, eget convallis dolor. Donec sit amet blandit libero. Aenean purus sem, dignissim
-		in mauris in, eleifend pretium metus. In in orci diam. Vestibulum rutrum eget ligula eget
-		posuere. Sed maximus sollicitudin porttitor. Pellentesque ac molestie ligula. Fusce velit nisl,
-		consequat nec semper nec, elementum a ante. In sit amet tellus id sem pretium molestie id a
-		purus. Proin ac convallis arcu. Morbi dignissim imperdiet enim et congue. Cras ac tempor nisi,
-		in semper ex. Phasellus scelerisque, quam vel congue rutrum, quam massa egestas diam, vitae
-		gravida erat dui eu nunc. Suspendisse dapibus, nibh ut blandit vehicula, nulla tellus luctus
-		velit, non ultricies lorem eros eget ex. Suspendisse sagittis tristique leo quis porttitor. Ut
-		venenatis convallis venenatis. Nunc at ante sodales, sollicitudin dui sit amet, condimentum
-		enim. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque posuere mi
-		urna, sit amet dignissim lacus volutpat eu. Aenean sit amet neque ligula. Integer ut dui orci.
-		Duis eget sem vestibulum, scelerisque ligula ultrices, laoreet velit. Fusce nec quam sit amet
-		nisi tempor tempor ac at nulla. Donec suscipit condimentum aliquet. Mauris gravida elementum
-		efficitur. Nunc ac nisi enim. Nullam volutpat ex cursus augue eleifend, at finibus nibh sodales.
-		Nunc malesuada interdum accumsan. Mauris at velit sed leo molestie fermentum quis ut erat.
-		Vestibulum quis leo tincidunt lorem varius cursus. Integer sed ante nisl. Aliquam sagittis
-		bibendum ligula eu ultricies. Quisque sit amet nisl at mi scelerisque sodales. Nunc et odio eget
-		augue volutpat lacinia malesuada ut arcu. Duis consectetur semper ex a porttitor. Nullam et sem
-		dui. Suspendisse maximus lectus eu purus tristique, euismod gravida eros pellentesque. In
-		vehicula sagittis orci vel dictum. Cras vel molestie enim. Vivamus semper vehicula nunc.
-		Vestibulum eget nisi neque. Praesent tortor ante, aliquet non nisl faucibus, dapibus porta nisi.
-		Aliquam bibendum mollis neque, ac rutrum orci lacinia at. Donec in lorem porttitor nisl faucibus
-		pulvinar quis eu ipsum. Quisque iaculis urna ac quam placerat pulvinar. Maecenas eget ex vel sem
-		luctus finibus vitae eu metus. Donec in massa eros. Suspendisse nunc erat, faucibus et nulla
-		ultricies, rhoncus dapibus sapien. Quisque porta tristique sem at varius. Donec quis fringilla
-		turpis. Aenean feugiat euismod felis quis sollicitudin.
-	</p>
+	<div class="greyBox">
+		<p>Here is a summary of your competitor {cname} based on their review data:</p>
+	</div>
 
-	<h2>AI Suggestions</h2>
-	<p>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut metus nisi, interdum id tempor sed,
-		elementum vel turpis. Phasellus accumsan tempor libero, a porttitor nisl dictum quis. Quisque et
-		dapibus nunc, eget convallis dolor. Donec sit amet blandit libero. Aenean purus sem, dignissim
-		in mauris in, eleifend pretium metus. In in orci diam. Vestibulum rutrum eget ligula eget
-		posuere. Sed maximus sollicitudin porttitor. Pellentesque ac molestie ligula. Fusce velit nisl,
-		consequat nec semper nec, elementum a ante. In sit amet tellus id sem pretium molestie id a
-		purus. Proin ac convallis arcu. Morbi dignissim imperdiet enim et congue. Cras ac tempor nisi,
-		in semper ex. Phasellus scelerisque, quam vel congue rutrum, quam massa egestas diam, vitae
-		gravida erat dui eu nunc. Suspendisse dapibus, nibh ut blandit vehicula, nulla tellus luctus
-		velit, non ultricies lorem eros eget ex. Suspendisse sagittis tristique leo quis porttitor. Ut
-		venenatis convallis venenatis. Nunc at ante sodales, sollicitudin dui sit amet, condimentum
-		enim. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque posuere mi
-		urna, sit amet dignissim lacus volutpat eu. Aenean sit amet neque ligula. Integer ut dui orci.
-		Duis eget sem vestibulum, scelerisque ligula ultrices, laoreet velit. Fusce nec quam sit amet
-		nisi tempor tempor ac at nulla. Donec suscipit condimentum aliquet. Mauris gravida elementum
-		efficitur. Nunc ac nisi enim. Nullam volutpat ex cursus augue eleifend, at finibus nibh sodales.
-		Nunc malesuada interdum accumsan. Mauris at velit sed leo molestie fermentum quis ut erat.
-		Vestibulum quis leo tincidunt lorem varius cursus. Integer sed ante nisl. Aliquam sagittis
-		bibendum ligula eu ultricies. Quisque sit amet nisl at mi scelerisque sodales. Nunc et odio eget
-		augue volutpat lacinia malesuada ut arcu. Duis consectetur semper ex a porttitor. Nullam et sem
-		dui. Suspendisse maximus lectus eu purus tristique, euismod gravida eros pellentesque. In
-		vehicula sagittis orci vel dictum. Cras vel molestie enim. Vivamus semper vehicula nunc.
-		Vestibulum eget nisi neque. Praesent tortor ante, aliquet non nisl faucibus, dapibus porta nisi.
-		Aliquam bibendum mollis neque, ac rutrum orci lacinia at. Donec in lorem porttitor nisl faucibus
-		pulvinar quis eu ipsum. Quisque iaculis urna ac quam placerat pulvinar. Maecenas eget ex vel sem
-		luctus finibus vitae eu metus. Donec in massa eros. Suspendisse nunc erat, faucibus et nulla
-		ultricies, rhoncus dapibus sapien. Quisque porta tristique sem at varius. Donec quis fringilla
-		turpis. Aenean feugiat euismod felis quis sollicitudin.
-	</p>
+	{#key llm_response2}
+		<SvelteMarkdown source={llm_response2} />
+	{/key}
+
+	<div class="greyBox">
+		<p>Here is an AI-generated list of suggestions which you can use to improve your business.</p>
+	</div>
+
+	{#key llm_response}
+		<SvelteMarkdown source={llm_response} />
+	{/key}
 </div>
 
 <style>
@@ -249,6 +264,7 @@
 		width: calc(100vw - 650px);
 		margin-left: 75px;
 		margin-top: 100px;
+		padding-bottom: 100px;
 	}
 
 	.dataBox > h2 {
@@ -266,5 +282,18 @@
 		font-size: 23px;
 		font-weight: 300;
 		background: none;
+	}
+
+	* {
+		font-size: 23px;
+	}
+
+	p {
+		font-weight: 300;
+	}
+
+	.greyBox {
+		padding-top: 20px;
+		margin-top: 20px;
 	}
 </style>
