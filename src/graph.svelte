@@ -74,6 +74,8 @@
 		},
 		xaxis: {
 			categories: ['01 Feb', '02 Feb', '03 Feb', '04 Feb', '05 Feb', '06 Feb', '07 Feb'],
+			hideOverlappingLabels: true,
+			rotate: 0,
 			labels: {
 				show: true,
 				style: {
@@ -107,17 +109,6 @@
 	};
 </script>
 
-<div class="flex justify-between mb-5">
-	<div>
-		<Dropdown class="w-40">
-			<DropdownItem>Yesterday</DropdownItem>
-			<DropdownItem>Today</DropdownItem>
-			<DropdownItem>Last 7 days</DropdownItem>
-			<DropdownItem>Last 30 days</DropdownItem>
-			<DropdownItem>Last 90 days</DropdownItem>
-		</Dropdown>
-	</div>
-</div>
 <Chart {options} />
 
 <style>

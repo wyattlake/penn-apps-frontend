@@ -101,11 +101,9 @@
 	}
 
 	.graphSidebar {
-		margin: 0px;
-		width: 400px;
+		width: 500px;
 		display: flex;
 		flex-direction: column;
-		justify-content: space-between;
 		height: 100%;
 		overflow-x: hidden;
 		position: fixed;
@@ -113,7 +111,8 @@
 		right: 0;
 		z-index: 1;
 		background-color: white;
-		border: 1px solid grey;
+		border-left: 1px solid #c4c4c4;
+		margin-left: 50px;
 	}
 
 	:global(html) {
@@ -128,8 +127,18 @@
 	}
 
 	.article {
-		width: calc(100vw - 550px);
+		width: calc(100vw - 650px);
 		margin-left: 75px;
 		margin-top: 100px;
+	}
+
+	.dataBox > h2 {
+		padding-left: 50px;
+	}
+
+	.graphSidebar {
+		padding-top: 20px;
+		padding-bottom: 20px;
+		height: 100vh;
 	}
 </style>

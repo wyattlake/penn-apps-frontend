@@ -73,13 +73,15 @@
 			show: false
 		},
 		xaxis: {
-			categories: ['01 Feb', '02 Feb', '03 Feb', '04 Feb', '05 Feb', '06 Feb', '07 Feb'],
+			categories: ['Feb', '02 Feb', '03 Feb', '04 Feb', '05 Feb', '06 Feb', '07 Feb'],
 			labels: {
-				show: false,
+				show: true,
+				hideOverlappingLabels: true,
+				rotate: 0,
 				style: {
 					fontFamily: 'Inter, sans-serif',
 					cssClass: 'text-xs font-normal fill-gray-500 dark:fill-gray-400',
-					fontSize: '20px',
+					fontSize: '15px',
 					fontWeight: '300'
 				}
 			},
@@ -107,20 +109,4 @@
 	};
 </script>
 
-<div class="flex justify-between mb-5">
-	<div>
-		<Dropdown class="w-40">
-			<DropdownItem>Yesterday</DropdownItem>
-			<DropdownItem>Today</DropdownItem>
-			<DropdownItem>Last 7 days</DropdownItem>
-			<DropdownItem>Last 30 days</DropdownItem>
-			<DropdownItem>Last 90 days</DropdownItem>
-		</Dropdown>
-	</div>
-</div>
 <Chart {options} />
-
-<style>
-	div {
-	}
-</style>
