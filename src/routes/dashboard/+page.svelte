@@ -62,8 +62,8 @@
 					<Legend color="#DCF086" name="Comp Average" />
 				</div>
 				<div>
-					<Legend color="#F3A0F7" name="Company A" />
-					<Legend color="#54bdff" name="Company B" />
+					<Legend color="#F3A0F7" name="Company A" route="/comp/a" />
+					<Legend color="#54bdff" name="Company B" route="/comp/b" />
 				</div>
 			</div>
 		</div>
