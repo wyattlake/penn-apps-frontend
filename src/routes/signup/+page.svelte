@@ -51,6 +51,9 @@
 <!-- register/+page.svelte -->
 <div class="login-container">
 	<div class="login-form">
+		<div class="logo">
+			<Logo scale={0.38} />
+		</div>
 		<form on:submit={handleRegister}>
 		 <h2>Register</h2>
 		 <input bind:value={email} type="text" placeholder="Email" />
@@ -68,7 +71,7 @@
 	   </div>
 	</div>
 	
-	   <style>
+	<style>
 		:global(body) {
 			font-family: Arial, sans-serif;
 			line-height: 1.2;
@@ -84,12 +87,20 @@
 		  min-height: 100vh;
 		  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 		}
+	
+		.logo {
+			flex-direction: column;
+			z-index: 2;
+			align-items: center;
+			justify-content: center;
+			display: flex;
+		}
 	  
 		.login-form {
 		  background-color: #ffffff;
 		  padding: 2rem;
 		  border-radius: 0.5rem;
-		  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+		  border: 0.6px solid #95e398;
 		  width: 100%;
 		  max-width: 300px;
 		}
@@ -152,4 +163,5 @@
 		  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
 		}
 	  </style>
+	
 	

@@ -32,12 +32,11 @@
 	}
 </script>
 
-<div class="logo">
-	<Logo scale={0.38} />
-</div>
-
 <div class="login-container"> 
 	<div class="login-form">
+		<div class="logo">
+			<Logo scale={0.38} />
+		</div>
 	  <h1>Login</h1>
 	  <form on:submit={loginWithMail}>
 		<input bind:value={email} type="text" placeholder="Email" />
@@ -65,18 +64,18 @@
 	}
 
 	.logo {
-		position: absolute;
-		top: 180px; /* Adjust this value to move the logo up or down */
-		left: 50%;
-		transform: translateX(-50%);
+		flex-direction: column;
 		z-index: 2;
+		align-items: center;
+		justify-content: center;
+		display: flex;
 	}
   
 	.login-form {
 	  background-color: #ffffff;
 	  padding: 2rem;
 	  border-radius: 0.5rem;
-	  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+	  border: 0.6px solid #95e398;
 	  width: 100%;
 	  max-width: 300px;
 	}
