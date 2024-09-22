@@ -64,13 +64,13 @@
 			{
 				name: 'You',
 				type: 'area',
-				data: cdata,
+				data: ydata,
 				color: '#95E398'
 			},
 			{
 				name: cname,
 				type: 'line',
-				data: ydata,
+				data: cdata,
 				color: '#F3A0F7'
 			}
 		],
