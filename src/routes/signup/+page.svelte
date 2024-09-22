@@ -6,6 +6,9 @@
 	import { goto } from '$app/navigation';
 	import { session } from '$lib/session';
 	import Logo from '../../icons/logo.svelte';
+	import TopLeft from '../../icons/topLeft.svelte';
+	import BottomRight from '../../icons/bottomRight.svelte';
+
 
 	let email: string = '';
 	let password: string = '';
@@ -48,6 +51,16 @@
 	}
 </script>
 
+<div class="background-containers">
+	<div class="topleft-container">
+		<TopLeft />
+	  </div>
+	  
+	  <div class="bottomright-container">
+		<BottomRight />
+	  </div>
+</div>
+
 <!-- register/+page.svelte -->
 <div class="login-container">
 	<div class="login-form">
@@ -87,6 +100,7 @@
 		min-height: 100vh;
 		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
 			sans-serif;
+		z-index: 1;
 	}
 
 	.logo {
@@ -104,6 +118,29 @@
 		border: 1px solid #c4c4c4;
 		width: 100%;
 		max-width: 300px;
+		z-index: 1;
+	}
+
+	.background-containers {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		height: 100vh;
+		pointer-events: none;
+		z-index: 0;
+  	}
+
+	.topleft-container {
+		position: absolute;
+		top: -200px;
+		left: -170px;
+	}
+
+  	.bottomright-container {
+		position: absolute;
+		bottom: -300px;
+		right: -50px;
 	}
 
 	h1 {
