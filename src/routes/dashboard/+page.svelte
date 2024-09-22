@@ -6,6 +6,8 @@
 	import ProgressBar from '../../progressBar.svelte';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
+	import TopLeft from '../../icons/topLeft.svelte';
+	import BottomRight from '../../icons/bottomRight.svelte';
 
 	onMount(async () => {
 		if (!localStorage.getItem('uid')) {
@@ -13,6 +15,16 @@
 		}
 	});
 </script>
+
+<div class="background-containers">
+	<div class="topleft-container">
+		<TopLeft />
+	  </div>
+	  
+	  <div class="bottomright-container">
+		<BottomRight />
+	  </div>
+</div>
 
 <div class="dashboardContainer">
 	<div class="dashboardLeft">
@@ -78,6 +90,7 @@
 		flex-direction: row;
 		width: 100vw;
 		height: 100vh;
+		z-index:1;
 	}
 
 	.dashboardLeft {
@@ -85,6 +98,7 @@
 		padding: 55px;
 		display: flex;
 		flex-direction: column;
+		z-index:1;
 	}
 
 	.dashboardRight {
@@ -94,6 +108,7 @@
 		flex-direction: column;
 		justify-content: space-between;
 		margin-bottom: 30px;
+		z-index:1;
 	}
 
 	.check {
@@ -118,6 +133,28 @@
 		padding: 0px;
 		width: 100vw;
 		height: 100vh;
+	}
+
+	.background-containers {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		height: 100vh;
+		pointer-events: none;
+		z-index: 0;
+  	}
+
+	.topleft-container {
+		position: absolute;
+		top: -200px;
+		left: -170px;
+	}
+
+  	.bottomright-container {
+		position: absolute;
+		bottom: -300px;
+		right: -50px;
 	}
 
 	.middleSection {
