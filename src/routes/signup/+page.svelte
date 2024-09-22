@@ -5,6 +5,7 @@
 	import { createUserWithEmailAndPassword } from 'firebase/auth';
 	import { goto } from '$app/navigation';
 	import { session } from '$lib/session';
+	import Logo from '../../icons/logo.svelte';
 
 	let email: string = '';
 	let password: string = '';
@@ -48,19 +49,107 @@
 </script>
 
 <!-- register/+page.svelte -->
-<div class="register-form">
-	<form on:submit={handleRegister}>
-		<h2>Register</h2>
-		<input bind:value={email} type="text" placeholder="Email" />
-		<input bind:value={password} type="password" placeholder="Password" />
-		<!-- make fields for company name, yelp, all required -->
-		<input bind:value={companyName} type="text" placeholder="Company Name" required />
-		<input bind:value={yelp} type="text" placeholder="Yelp" required />
-		<!-- make required fields of street name, city, state, zip code -->
-		<input bind:value={streetName} type="text" placeholder="Street Name" required />
-		<input bind:value={city} type="text" placeholder="City" required />
-		<input bind:value={state} type="text" placeholder="State" required />
-		<input bind:value={zipCode} type="text" placeholder="Zip Code" required />
-		<button type="submit">Register</button>
-	</form>
-</div>
+<div class="login-container">
+	<div class="login-form">
+		<form on:submit={handleRegister}>
+		 <h2>Register</h2>
+		 <input bind:value={email} type="text" placeholder="Email" />
+		 <input bind:value={password} type="password" placeholder="Password" />
+		 <!-- make fields for company name, yelp, all required -->
+		 <input bind:value={companyName} type="text" placeholder="Company Name" required />
+		 <input bind:value={yelp} type="text" placeholder="Yelp" required />
+		 <!-- make required fields of street name, city, state, zip code -->
+		 <input bind:value={streetName} type="text" placeholder="Street Name" required />
+		 <input bind:value={city} type="text" placeholder="City" required />
+		 <input bind:value={state} type="text" placeholder="State" required />
+		 <input bind:value={zipCode} type="text" placeholder="Zip Code" required />
+		 <button type="submit">Register</button>
+		</form>
+	   </div>
+	</div>
+	
+	   <style>
+		:global(body) {
+			font-family: Arial, sans-serif;
+			line-height: 1.2;
+			overflow: hidden;
+			margin: 0;
+			padding: 0;
+		}
+	
+		.login-container {
+		  display: flex;
+		  justify-content: center;
+		  align-items: center;
+		  min-height: 100vh;
+		  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+		}
+	  
+		.login-form {
+		  background-color: #ffffff;
+		  padding: 2rem;
+		  border-radius: 0.5rem;
+		  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+		  width: 100%;
+		  max-width: 300px;
+		}
+	  
+		h1 {
+		  color: #1f2937;
+		  font-size: 1.5rem;
+		  font-weight: 600;
+		  text-align: center;
+		  margin-bottom: 1.5rem;
+		}
+	  
+		form {
+		  display: flex;
+		  flex-direction: column;
+		  gap: 1rem;
+		  align-items: center;
+		}
+	  
+		input {
+		  width: 92%;
+		  border: 1px solid #d1d5db;
+		  border-radius: 0.375rem;
+		  font-size: 1rem;
+		  color: #1f2937;
+		  padding: 10px;
+		  /* display: flex; */
+		  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+		}
+	  
+		input:focus {
+		  outline: none;
+		  border-color: #95e398;
+		  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+		}
+	  
+		input::placeholder {
+		  color: #9ca3af;
+		}
+	  
+		button {
+		  background-color: #95e398;
+		  width: 100%;
+		  color: #ffffff;
+		  font-weight: 500;
+		  padding: 0.75rem 1rem;
+		  border: none;
+		  border-radius: 0.375rem;
+		  font-size: 1rem;
+		  cursor: pointer;
+		  transition: background-color 0.15s ease-in-out;
+		}
+	  
+		button:hover {
+		  background-color: #6fb772;
+		}
+	  
+		button:focus {
+		  outline: none;
+		  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+		}
+	  </style>
+	

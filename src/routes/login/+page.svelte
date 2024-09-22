@@ -3,6 +3,7 @@
 	import { session } from '$lib/session';
 	import { auth, db } from '$lib/firebase.client';
 	import * as firestore from 'firebase/firestore';
+	import Logo from '../../icons/logo.svelte';
 	import {
 		GoogleAuthProvider,
 		signInWithPopup,
@@ -31,13 +32,111 @@
 	}
 </script>
 
-<div class="login-form">
-	<h1>Login</h1>
-	<form on:submit={loginWithMail}>
+<div class="logo">
+	<Logo scale={0.38} />
+</div>
+
+<div class="login-container"> 
+	<div class="login-form">
+	  <h1>Login</h1>
+	  <form on:submit={loginWithMail}>
 		<input bind:value={email} type="text" placeholder="Email" />
 		<input bind:value={password} type="password" placeholder="Password" />
 		<button type="submit">Login</button>
-	</form>
+	  </form>
+	</div>
+  </div>
+  
+  <style>
+	:global(body) {
+		font-family: Arial, sans-serif;
+		line-height: 1.2;
+		overflow: hidden;
+		margin: 0;
+		padding: 0;
+	}
 
-	<div>or</div>
-</div>
+	.login-container {
+	  display: flex;
+	  justify-content: center;
+	  align-items: center;
+	  min-height: 100vh;
+	  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	}
+
+	.logo {
+		position: absolute;
+		top: 180px; /* Adjust this value to move the logo up or down */
+		left: 50%;
+		transform: translateX(-50%);
+		z-index: 2;
+	}
+  
+	.login-form {
+	  background-color: #ffffff;
+	  padding: 2rem;
+	  border-radius: 0.5rem;
+	  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+	  width: 100%;
+	  max-width: 300px;
+	}
+  
+	h1 {
+	  color: #1f2937;
+	  font-size: 1.5rem;
+	  font-weight: 600;
+	  text-align: center;
+	  margin-bottom: 1.5rem;
+	}
+  
+	form {
+	  display: flex;
+	  flex-direction: column;
+	  gap: 1rem;
+	  align-items: center;
+	}
+  
+	input {
+	  width: 92%;
+	  border: 1px solid #d1d5db;
+	  border-radius: 0.375rem;
+	  font-size: 1rem;
+	  color: #1f2937;
+	  padding: 10px;
+	  /* display: flex; */
+	  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+	}
+  
+	input:focus {
+	  outline: none;
+	  border-color: #95e398;
+	  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+	}
+  
+	input::placeholder {
+	  color: #9ca3af;
+	}
+  
+	button {
+	  background-color: #95e398;
+	  width: 100%;
+	  color: #ffffff;
+	  font-weight: 500;
+	  padding: 0.75rem 1rem;
+	  border: none;
+	  border-radius: 0.375rem;
+	  font-size: 1rem;
+	  cursor: pointer;
+	  transition: background-color 0.15s ease-in-out;
+	}
+  
+	button:hover {
+	  background-color: #6fb772;
+	}
+  
+	button:focus {
+	  outline: none;
+	  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+	}
+  </style>
+
