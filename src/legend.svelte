@@ -5,17 +5,22 @@
 	export let name = 'None';
 	export let color = '#000000';
 	export let route: string | null = null;
+
+	let displayName = name;
+	if (name.length > 17) {
+		displayName = name.substring(0, 14) + '...';
+	}
 </script>
 
 {#if route == null}
 	<div class="legendContainer" style="--color: {color}">
 		<div class="colorDot"></div>
-		<p>{name}</p>
+		<p>{displayName}</p>
 	</div>
 {:else}
 	<div class="legendContainer" style="--color: {color}">
 		<div class="colorDot"></div>
-		<a href={route} data-sveltekit-reload>{name}</a>
+		<a href={route} data-sveltekit-reload>{displayName}</a>
 	</div>
 {/if}
 

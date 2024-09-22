@@ -1,5 +1,9 @@
+<script>
+	export let checked;
+</script>
+
 <label class="container">
-	<input type="checkbox" />
+	<input type="checkbox" {checked} />
 	<span class="checkmark"></span>
 </label>
 

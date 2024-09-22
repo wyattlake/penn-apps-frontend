@@ -18,11 +18,32 @@
 	let companyData = null;
 	import TopLeft from '../../icons/topLeft.svelte';
 	import BottomRight from '../../icons/bottomRight.svelte';
+	import { documentId } from 'firebase/firestore/lite';
 
 	let categories: String[] = [];
-	let data: number[] = [];
+	let ydata: number[] = [];
+	let cdata1: number[] = [];
+	let cdata2: number[] = [];
+	let avgdata: number[] = [];
+	let c1name = 'Company A';
+	let c2name = 'Company B';
+	let yname = 'Loading...';
 
-	let competitorIds = [];
+	let competitorIds: number[] = [0, 0];
+	let nps = 0;
+	let npsChange = 0;
+
+	let reviewCount = 0;
+	let reviewChange = 0;
+
+	let foodSentiment = 0;
+	let environmentSentiment = 0;
+	let serviceSentiment = 0;
+
+	let updateToggle = true;
+
+	let hideComp = false;
+	let hideAv = false;
 
 	onMount(async () => {
 		if (!localStorage.getItem('uid')) {
@@ -42,7 +63,13 @@
 				firestore.where('business_name', '==', companyData.displayName)
 			);
 			const businessSnap = await firestore.getDocs(businessQuery);
-			const businessData = businessSnap.docs[0].data();
+			const maindata = businessSnap.docs[0].data();
+
+			yname = maindata.business_name;
+
+			foodSentiment = (maindata.business_topics['food'] + 1) / 2;
+			environmentSentiment = (maindata.business_topics['environment'] + 1) / 2;
+			serviceSentiment = (maindata.business_topics['service'] + 1) / 2;
 
 			let raw_categories = [
 				'Sep 2023',
@@ -59,20 +86,36 @@
 				'Aug 2024'
 			].reverse();
 
-			for (let raw_category of raw_categories) {
-				if (businessData.moving_avg_rating[raw_category] != undefined) {
-					categories.push(raw_category.substring(0, 3));
-					data.push(businessData.moving_avg_rating[raw_category].toFixed(2));
-					if (categories.length == 6) {
+			let npsSet = false;
+			let lastNps = 0.0;
+
+			let countSet = false;
+			let lastCount = 0;
+
+			for (var category of raw_categories) {
+				if (maindata.monthly_nps[category] != null) {
+					if (!npsSet) {
+						nps = maindata.monthly_nps[category];
+						npsSet = true;
+					} else {
+						lastNps = maindata.monthly_nps[category];
+						break;
+					}
+
+					if (!countSet) {
+						reviewCount = maindata.monthly_reviews_count[category];
+						countSet = true;
+					} else {
+						lastCount = maindata.monthly_reviews_count[category];
 						break;
 					}
 				}
 			}
 
-			categories = categories;
-			data = data;
+			npsChange = nps - lastNps;
 
-			companyData = businessData;
+			nps = nps;
+			npsChange = npsChange;
 
 			// fetch request to https://green-sound-1619.ploomberapp.io/db/competitors/business_id={businessData.id}
 			fetch(
@@ -81,7 +124,7 @@
 					method: 'GET',
 					mode: 'cors',
 					headers: {
-						'Content-Type': 'application/json',
+						'Content-Type': 'application/json'
 						// 'Access-Control-Allow-Origin': 'http://localhost:5173',
 						// 'Access-Control-Allow-Credentials': 'true',
 						// 'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
@@ -90,24 +133,55 @@
 				}
 			)
 				.then((response) => {
-					console.log('response', response);
 					return response.json();
 				})
-				.then((data) => {
+				.then(async (data) => {
 					competitorIds = data;
-					console.log("competitorIds", competitorIds);
+
+					// @ts-ignore
+					const d1 = firestore.doc(db, 'businesses', competitorIds[0]);
+					let a1 = await firestore.getDoc(d1);
+					let r1 = a1.data();
+
+					// @ts-ignore
+					const d2 = firestore.doc(db, 'businesses', competitorIds[1]);
+					let a2 = await firestore.getDoc(d2);
+					let r2 = a2.data();
+
+					if (r1 != null && r2 != null) {
+						c1name = r1.business_name;
+						c2name = r2.business_name;
+						for (let raw_category of raw_categories) {
+							if (
+								maindata.moving_avg_rating[raw_category] != undefined &&
+								r1.moving_avg_rating[raw_category] != undefined &&
+								r2.moving_avg_rating[raw_category] != undefined
+							) {
+								categories.push(raw_category.substring(0, 3));
+								ydata.push(maindata.moving_avg_rating[raw_category].toFixed(2));
+								cdata1.push(r1.moving_avg_rating[raw_category].toFixed(2));
+								cdata2.push(r2.moving_avg_rating[raw_category].toFixed(2));
+
+								let avg: number =
+									(r1.moving_avg_rating[raw_category] + r2.moving_avg_rating[raw_category]) / 2;
+								avgdata.push(Math.round(avg * 100) / 100);
+								if (categories.length == 6) {
+									break;
+								}
+							}
+						}
+					}
+
+					updateToggle = !updateToggle;
 				})
-				.catch((error) => {
-					console.error('Error:', error);
-				});
+				.catch((error) => {});
 		}
 	});
 	function signout() {
 		localStorage.clear();
-		session.set({loggedIn: false, user: null});
+		session.set({ loggedIn: false, user: null });
 		goto('/');
 	}
-
 
 	// load
 </script>
@@ -126,16 +200,23 @@
 	<div class="dashboardLeft">
 		<div class="dashboardTitle">
 			<h1>Dashboard</h1>
-			<!-- if companyData then show companyData.business_rating -->
-			<!-- {#if companyData}
-				<h2>{companyData.business_rating}</h2>
-			{/if} -->
-			<p>Review Average</p>
+
+			<p>{yname}</p>
 		</div>
 
 		<div class="graphContainer">
-			{#key categories}
-				<Graph companyData={data} {categories} />
+			{#key [updateToggle, hideAv, hideComp]}
+				<Graph
+					companyData={ydata}
+					{categories}
+					comp1Data={cdata1}
+					comp1Name={c1name}
+					comp2Data={cdata2}
+					comp2Name={c2name}
+					avgData={avgdata}
+					showAv={!hideAv}
+					showComp={!hideComp}
+				/>
 			{/key}
 		</div>
 	</div>
@@ -144,11 +225,23 @@
 		<div>
 			<div class="right-top" style="display:flex;flex-direction:row;justify-content:space-between">
 				<h2>Key Metrics</h2>
-				<button on:click={signout}>Sign Out</button>
+				<button on:click={signout} style="font-size: 23px;">Sign Out</button>
 			</div>
 			<div class="greyBox" style="display:flex;flex-direction:row;justify-content:space-between;">
-				<Metric change={5.21} number={10.51} name="NPS" />
-				<Metric change={5.21} number={10.51} name="Review Count" up={false} />
+				<Metric
+					change={npsChange.toFixed(2)}
+					number={nps.toFixed(2)}
+					name="NPS"
+					up={npsChange >= 0}
+					equal={npsChange == 0}
+				/>
+				<Metric
+					change={reviewChange.toString()}
+					number={reviewCount.toString() + ' per month'}
+					name="Review Count"
+					up={reviewChange >= 0}
+					equal={reviewChange == 0}
+				/>
 			</div>
 		</div>
 		<div class="middleSection">
@@ -156,19 +249,26 @@
 				<p>Click on a company in the legend to start an in-depth comparison</p>
 				<div class="checkboxes">
 					<div class="check">
-						<Checkbox />
+						<label class="container">
+							<input type="checkbox" bind:checked={hideComp} />
+							<span class="checkmark"></span>
+						</label>
+						<!-- <Checkbox bind:checked={hideComp} /> -->
 						<p>Hide Competition</p>
 					</div>
 					<div class="check">
-						<Checkbox />
+						<label class="container">
+							<input type="checkbox" bind:checked={hideAv} />
+							<span class="checkmark"></span>
+						</label>
 						<p>Hide Average</p>
 					</div>
 				</div>
 			</div>
 			<div class="middleRight">
-				<ProgressBar progress={0.4} barColor="#95E398" name="Food" />
-				<ProgressBar progress={0.7} barColor="#F3A0F7" name="Environment" />
-				<ProgressBar progress={0.5} barColor="#54bdff" name="Service" />
+				<ProgressBar progress={foodSentiment} barColor="#95E398" name="Food" />
+				<ProgressBar progress={environmentSentiment} barColor="#F3A0F7" name="Environment" />
+				<ProgressBar progress={serviceSentiment} barColor="#54bdff" name="Service" />
 			</div>
 		</div>
 		<div>
@@ -179,8 +279,10 @@
 					<Legend color="#DCF086" name="Comp Average" />
 				</div>
 				<div>
-					<Legend color="#F3A0F7" name="Company A" route="/comp/a" />
-					<Legend color="#54bdff" name="Company B" route="/comp/b" />
+					{#key updateToggle}
+						<Legend color="#F3A0F7" name={c1name} route="/comp/{competitorIds[0]}" />
+						<Legend color="#54bdff" name={c2name} route="/comp/{competitorIds[1]}" />
+					{/key}
 				</div>
 			</div>
 		</div>
@@ -304,5 +406,75 @@
 		font-size: 23px;
 		font-weight: 300;
 		background: none;
+	}
+	.container {
+		display: block;
+		position: relative;
+		padding-left: 35px;
+		margin-bottom: 12px;
+		cursor: pointer;
+		font-size: 22px;
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+	}
+
+	/* Hide the browser's default checkbox */
+	.container input {
+		position: absolute;
+		opacity: 0;
+		cursor: pointer;
+		height: 0;
+		width: 0;
+	}
+
+	/* Create a custom checkbox */
+	.checkmark {
+		position: absolute;
+		top: 0;
+		left: 0;
+		height: 25px;
+		width: 25px;
+		background-color: #fafafa;
+		border: 1px solid #c4c4c4;
+		border-radius: 5px;
+		border: 2p;
+	}
+
+	/* On mouse-over, add a grey background color */
+	.container:hover input ~ .checkmark {
+		background-color: #ccc;
+	}
+
+	/* When the checkbox is checked, add a blue background */
+	.container input:checked ~ .checkmark {
+		background-color: #54bdff;
+		border: 1px solid #54bdff;
+	}
+
+	/* Create the checkmark/indicator (hidden when not checked) */
+	.checkmark:after {
+		content: '';
+		position: absolute;
+		display: none;
+	}
+
+	/* Show the checkmark when checked */
+	.container input:checked ~ .checkmark:after {
+		display: block;
+	}
+
+	/* Style the checkmark/indicator */
+	.container .checkmark:after {
+		left: 9px;
+		top: 5px;
+		width: 5px;
+		height: 10px;
+		border: solid white;
+		border-width: 0 3px 3px 0;
+		-webkit-transform: rotate(45deg);
+		-ms-transform: rotate(45deg);
+		transform: rotate(45deg);
 	}
 </style>

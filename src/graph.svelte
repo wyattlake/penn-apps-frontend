@@ -3,8 +3,48 @@
 
 	export let companyData;
 	export let categories;
+	export let comp1Data;
+	export let comp2Data;
+	export let avgData;
+	export let comp1Name;
+	export let comp2Name;
 
-	console.log(categories);
+	export let showComp;
+	export let showAv;
+
+	let series = [
+		{
+			name: 'You',
+			type: 'area',
+			data: companyData,
+			color: '#95E398'
+		}
+	];
+
+	if (showComp) {
+		series.push({
+			name: comp1Name,
+			type: 'line',
+			data: comp1Data,
+			color: '#F3A0F7'
+		});
+
+		series.push({
+			name: comp2Name,
+			type: 'line',
+			data: comp2Data,
+			color: '#54bdff'
+		});
+	}
+
+	if (showAv) {
+		series.push({
+			name: 'Comp Average',
+			type: 'line',
+			data: avgData,
+			color: '#DCF086'
+		});
+	}
 
 	let options = {
 		chart: {
@@ -33,7 +73,7 @@
 			}
 		},
 		fill: {
-			type: ['gradient'],
+			type: ['gradient', 'fill', 'fill'],
 			gradient: {
 				opacityFrom: 0.55,
 				opacityTo: 0,
@@ -60,14 +100,7 @@
 				top: -20
 			}
 		},
-		series: [
-			{
-				name: 'You',
-				type: 'area',
-				data: companyData,
-				color: '#95E398'
-			}
-		],
+		series: series,
 		legend: {
 			show: false
 		},

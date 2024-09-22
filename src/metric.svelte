@@ -2,17 +2,19 @@
 	import DownArrow from './icons/downArrow.svelte';
 	import UpArrow from './icons/upArrow.svelte';
 
-	export let change = 0;
-	export let number = 0;
+	export let change = '';
+	export let number = '';
 	export let name = 'None';
 	export let up = true;
+	export let equal = false;
 </script>
 
 <div class="container">
 	<p class="name">{name}</p>
 	<div class="numbers">
 		<div>
-			{#if up}
+			<!-- svelte-ignore empty-block -->
+			{#if equal}{:else if up}
 				<UpArrow scale={0.86} />
 			{:else}
 				<DownArrow scale={0.86} />
