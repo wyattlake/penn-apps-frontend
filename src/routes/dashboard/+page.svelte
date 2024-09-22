@@ -114,8 +114,7 @@
 
 			npsChange = nps - lastNps;
 
-			nps = nps;
-			npsChange = npsChange;
+			reviewChange = reviewCount - lastCount;
 
 			// fetch request to https://green-sound-1619.ploomberapp.io/db/competitors/business_id={businessData.id}
 			fetch(
