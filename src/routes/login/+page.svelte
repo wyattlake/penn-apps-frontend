@@ -4,6 +4,9 @@
 	import { auth, db } from '$lib/firebase.client';
 	import * as firestore from 'firebase/firestore';
 	import Logo from '../../icons/logo.svelte';
+	import TopLeft from '../../icons/topLeft.svelte';
+	import BottomRight from '../../icons/bottomRight.svelte';
+
 	import {
 		GoogleAuthProvider,
 		signInWithPopup,
@@ -31,6 +34,16 @@
 			});
 	}
 </script>
+
+<div class="background-containers">
+	<div class="topleft-container">
+		<TopLeft />
+	  </div>
+	  
+	  <div class="bottomright-container">
+		<BottomRight />
+	  </div>
+</div>
 
 <div class="login-container">
 	<div class="login-form">
@@ -107,6 +120,28 @@
 		transition:
 			border-color 0.15s ease-in-out,
 			box-shadow 0.15s ease-in-out;
+	}
+
+	.background-containers {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		height: 100vh;
+		pointer-events: none;
+		z-index: 0;
+  	}
+
+	.topleft-container {
+		position: absolute;
+		top: -200px;
+		left: -170px;
+	}
+
+  	.bottomright-container {
+		position: absolute;
+		bottom: -300px;
+		right: -50px;
 	}
 
 	input:focus {
