@@ -20,27 +20,10 @@
 				const { user }: UserCredential = result;
 				// load from firestore "users" collection
 
-				const docRef = firestore.doc(db, 'users', user?.uid);
-				const docSnap = firestore.getDoc(docRef).then((docSnap) => {
-					const data = docSnap.data();
-					session.set({
-						loggedIn: true,
-						user: {
-							displayName: user?.displayName,
-							email: user?.email,
-							photoURL: user?.photoURL,
-							uid: user?.uid,
-							location: {
-								streetName: data?.location?.streetName,
-								city: data?.location?.city,
-								state: data?.location?.state,
-								zipCode: data?.location?.zipCode
-							},
-							yelp: data?.yelp
-						}
-					});
-					goto('/');
-				});
+				if (user!.uid != null) {
+					localStorage.setItem('uid', user?.uid);
+					goto('/dashboard');
+				}
 			})
 			.catch((error) => {
 				return error;

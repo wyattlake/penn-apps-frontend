@@ -1,21 +1,20 @@
 <script>
 	// import { authClient, fetchAuthenticationInfo } from '$lib/auth';
 	import { goto } from '$app/navigation';
-    import { onMount } from 'svelte';
-    import { session } from '$lib/session';
-    import { auth, db } from '$lib/firebase.client';
-    
+	import { onMount } from 'svelte';
+	import { session } from '$lib/session';
+	import { auth, db } from '$lib/firebase.client';
+
 	import Typewriter from 'svelte-typewriter';
 	import Logo from '../icons/logo.svelte';
 	import Background from '../icons/background.svelte';
 	import TitleGraphic from '../icons/titleGraphic.svelte';
 
-    onMount(async () => {
-        if (auth.currentUser) {
-            goto('/dashboard');
-        }
-    });
-
+	onMount(async () => {
+		if (localStorage.getItem('uid')) {
+			goto('/dashboard');
+		}
+	});
 </script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -25,7 +24,7 @@
 </div>
 
 <div class="background-graph-container">
-	<TitleGraphic />
+	<TitleGraphic scale={0.8} />
 </div>
 
 <div class="content-container">
@@ -42,9 +41,9 @@
 				solutions for
 				<span class="typewriter-container">
 					<Typewriter mode="loop">
-						<h1 class="gradient-text">small businesses</h1>
-						<h1 class="gradient-text">nonprofits</h1>
-						<h1 class="gradient-text">innovators</h1>
+						<h1 class="gradient-text-2">small businesses</h1>
+						<h1 class="gradient-text-2">nonprofits</h1>
+						<h1 class="gradient-text-2">innovators</h1>
 					</Typewriter>
 				</span>
 			</h1>
@@ -89,9 +88,9 @@
 	}
 
 	.btn-primary {
-		background-color: #a1eea4;
+		background-color: #95e398;
 		color: white;
-		border: 0.6px solid #a1eea4;
+		border: 0.6px solid #95e398;
 	}
 
 	.btn-secondary {
@@ -166,11 +165,20 @@
 
 	.gradient-text {
 		display: inline-block;
-		background: linear-gradient(180deg, #77c893, #a9f095, #c0f5aa);
+		background: linear-gradient(180deg, #77c893, #a9f095);
 		-webkit-background-clip: text;
 		background-clip: text;
 		-webkit-text-fill-color: transparent;
-		background-size: 200% 200%;
+		background-size: 100% 100%;
+	}
+
+	.gradient-text-2 {
+		display: inline-block;
+		background: linear-gradient(0deg, #77c893, #a9f095);
+		-webkit-background-clip: text;
+		background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-size: 100% 100%;
 	}
 
 	@keyframes gradient {

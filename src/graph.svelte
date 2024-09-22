@@ -73,11 +73,12 @@
 			show: false
 		},
 		xaxis: {
-			categories: ['01 Feb', '02 Feb', '03 Feb', '04 Feb', '05 Feb', '06 Feb', '07 Feb'],
+			categories: ['Feb', '02 Feb', '03 Feb', '04 Feb', '05 Feb', '06 Feb', '07 Feb'],
 			hideOverlappingLabels: true,
 			rotate: 0,
 			labels: {
 				show: true,
+				rotate: 0,
 				style: {
 					fontFamily: 'Inter, sans-serif',
 					cssClass: 'text-xs font-normal fill-gray-500 dark:fill-gray-400',
