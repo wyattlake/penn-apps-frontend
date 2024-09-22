@@ -51,7 +51,7 @@
 			</div>
 			<div class="middleRight">
 				<ProgressBar progress={0.4} barColor="#95E398" name="Food" />
-				<ProgressBar progress={0.7} barColor="#F3A0F7" name="Cleanliness" />
+				<ProgressBar progress={0.7} barColor="#F3A0F7" name="Environment" />
 				<ProgressBar progress={0.5} barColor="#54bdff" name="Service" />
 			</div>
 		</div>
