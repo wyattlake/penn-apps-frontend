@@ -6,18 +6,50 @@
 	import ProgressBar from '../../progressBar.svelte';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
+	// firebase, firestore imports
+
+	import { session } from '$lib/session';
+	import { auth, db } from '$lib/firebase.client';
+	import * as firestore from 'firebase/firestore';
+
+	/**
+	 * @type {firestore.DocumentData | null}
+	 */
+	let companyData = null;
 
 	onMount(async () => {
 		if (!localStorage.getItem('uid')) {
 			goto('/');
 		}
+
+		// @ts-ignore
+		const docRef = firestore.doc(db, 'users', localStorage.getItem('uid'));
+		const docSnap = await firestore.getDoc(docRef);
+		
+		if (docSnap.exists()) {
+			companyData = docSnap.data();
+			// find company in "businesses" collection with business_name == companyData.displayName
+			const businessRef = firestore.collection(db, 'businesses');
+			const businessQuery = firestore.query(businessRef, firestore.where('business_name', '==', companyData.displayName));
+			const businessSnap = await firestore.getDocs(businessQuery);
+			const businessData = businessSnap.docs[0].data();
+
+			companyData = businessData;
+		}
 	});
+
+
+	// load
 </script>
 
 <div class="dashboardContainer">
 	<div class="dashboardLeft">
 		<div class="dashboardTitle">
 			<h1>Dashboard</h1>
+			<!-- if companyData then show companyData.business_rating -->
+			<!-- {#if companyData}
+				<h2>{companyData.business_rating}</h2>
+			{/if} -->
 			<p>Review Average</p>
 		</div>
 
