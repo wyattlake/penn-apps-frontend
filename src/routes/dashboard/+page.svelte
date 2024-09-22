@@ -22,6 +22,8 @@
 	let categories: String[] = [];
 	let data: number[] = [];
 
+	let competitorIds = [];
+
 	onMount(async () => {
 		if (!localStorage.getItem('uid')) {
 			goto('/');
@@ -71,6 +73,33 @@
 			data = data;
 
 			companyData = businessData;
+
+			// fetch request to https://green-sound-1619.ploomberapp.io/db/competitors/business_id={businessData.id}
+			fetch(
+				`http://localhost:8088/https://green-sound-1619.ploomberapp.io/db/competitors/business_id=${businessSnap.docs[0].id}`,
+				{
+					method: 'GET',
+					mode: 'cors',
+					headers: {
+						'Content-Type': 'application/json',
+						// 'Access-Control-Allow-Origin': 'http://localhost:5173',
+						// 'Access-Control-Allow-Credentials': 'true',
+						// 'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+						// 'Access-Control-Allow-Headers': 'Content-Type, Origin, Accept'
+					}
+				}
+			)
+				.then((response) => {
+					console.log('response', response);
+					return response.json();
+				})
+				.then((data) => {
+					competitorIds = data;
+					console.log("competitorIds", competitorIds);
+				})
+				.catch((error) => {
+					console.error('Error:', error);
+				});
 		}
 	});
 
