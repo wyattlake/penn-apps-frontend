@@ -18,6 +18,8 @@
 	async function handleRegister() {
 		await createUserWithEmailAndPassword(auth, email, password)
 			.then((result) => {
+				const { user } = result;
+
 				const docRef = firestore.doc(db, 'users', user?.uid);
 				firestore
 					.setDoc(docRef, {
