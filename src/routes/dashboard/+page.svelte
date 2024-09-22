@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import Checkbox from '../../checkbox.svelte';
 	import Graph from '../../graph.svelte';
 	import Legend from '../../legend.svelte';
@@ -19,6 +19,11 @@
 	import TopLeft from '../../icons/topLeft.svelte';
 	import BottomRight from '../../icons/bottomRight.svelte';
 
+	let categories: String[] = [];
+	let data: number[] = [];
+
+	let competitorIds = [];
+
 	onMount(async () => {
 		if (!localStorage.getItem('uid')) {
 			goto('/');
@@ -27,19 +32,76 @@
 		// @ts-ignore
 		const docRef = firestore.doc(db, 'users', localStorage.getItem('uid'));
 		const docSnap = await firestore.getDoc(docRef);
-		
+
 		if (docSnap.exists()) {
 			companyData = docSnap.data();
 			// find company in "businesses" collection with business_name == companyData.displayName
 			const businessRef = firestore.collection(db, 'businesses');
-			const businessQuery = firestore.query(businessRef, firestore.where('business_name', '==', companyData.displayName));
+			const businessQuery = firestore.query(
+				businessRef,
+				firestore.where('business_name', '==', companyData.displayName)
+			);
 			const businessSnap = await firestore.getDocs(businessQuery);
 			const businessData = businessSnap.docs[0].data();
 
+			let raw_categories = [
+				'Sep 2023',
+				'Oct 2023',
+				'Nov 2023',
+				'Dec 2023',
+				'Jan 2024',
+				'Feb 2024',
+				'Mar 2024',
+				'Apr 2024',
+				'May 2024',
+				'Jun 2024',
+				'Jul 2024',
+				'Aug 2024'
+			].reverse();
+
+			for (let raw_category of raw_categories) {
+				if (businessData.moving_avg_rating[raw_category] != undefined) {
+					categories.push(raw_category.substring(0, 3));
+					data.push(businessData.moving_avg_rating[raw_category].toFixed(2));
+					if (categories.length == 6) {
+						break;
+					}
+				}
+			}
+
+			categories = categories;
+			data = data;
+
 			companyData = businessData;
+
+			// fetch request to https://green-sound-1619.ploomberapp.io/db/competitors/business_id={businessData.id}
+			fetch(
+				`http://localhost:8088/https://green-sound-1619.ploomberapp.io/db/competitors/business_id=${businessSnap.docs[0].id}`,
+				{
+					method: 'GET',
+					mode: 'cors',
+					headers: {
+						'Content-Type': 'application/json',
+						// 'Access-Control-Allow-Origin': 'http://localhost:5173',
+						// 'Access-Control-Allow-Credentials': 'true',
+						// 'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+						// 'Access-Control-Allow-Headers': 'Content-Type, Origin, Accept'
+					}
+				}
+			)
+				.then((response) => {
+					console.log('response', response);
+					return response.json();
+				})
+				.then((data) => {
+					competitorIds = data;
+					console.log("competitorIds", competitorIds);
+				})
+				.catch((error) => {
+					console.error('Error:', error);
+				});
 		}
 	});
-
 	function signout() {
 		localStorage.clear();
 		session.set({loggedIn: false, user: null});
@@ -53,11 +115,11 @@
 <div class="background-containers">
 	<div class="topleft-container">
 		<TopLeft />
-	  </div>
-	  
-	  <div class="bottomright-container">
+	</div>
+
+	<div class="bottomright-container">
 		<BottomRight />
-	  </div>
+	</div>
 </div>
 
 <div class="dashboardContainer">
@@ -72,7 +134,9 @@
 		</div>
 
 		<div class="graphContainer">
-			<Graph />
+			{#key categories}
+				<Graph companyData={data} {categories} />
+			{/key}
 		</div>
 	</div>
 
@@ -131,7 +195,7 @@
 		flex-direction: row;
 		width: 100vw;
 		height: 100vh;
-		z-index:1;
+		z-index: 1;
 	}
 
 	.dashboardLeft {
@@ -139,7 +203,7 @@
 		padding: 55px;
 		display: flex;
 		flex-direction: column;
-		z-index:1;
+		z-index: 1;
 	}
 
 	.dashboardRight {
@@ -149,7 +213,7 @@
 		flex-direction: column;
 		justify-content: space-between;
 		margin-bottom: 30px;
-		z-index:1;
+		z-index: 1;
 	}
 
 	.check {
@@ -184,7 +248,7 @@
 		height: 100vh;
 		pointer-events: none;
 		z-index: 0;
-  	}
+	}
 
 	.topleft-container {
 		position: absolute;
@@ -192,7 +256,7 @@
 		left: -170px;
 	}
 
-  	.bottomright-container {
+	.bottomright-container {
 		position: absolute;
 		bottom: -300px;
 		right: -50px;
